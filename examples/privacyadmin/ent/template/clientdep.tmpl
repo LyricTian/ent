@@ -1,0 +1,12 @@
+{{- define "dialect/sql/config/fields/clientdep" -}}
+    Enforcer *casbin.Enforcer
+{{- end -}}
+
+{{- define "dialect/sql/config/options/clientdep" }}
+    // Enforcer configures the client Enforcer.
+    func Enforcer(enforcer *casbin.Enforcer) Option {
+        return func(c *config) {
+            c.Enforcer = enforcer
+        }
+    }
+{{- end }}

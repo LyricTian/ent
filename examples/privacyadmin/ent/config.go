@@ -9,6 +9,7 @@ package ent
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"github.com/casbin/casbin"
 )
 
 // Option function to configure the client.
@@ -23,7 +24,8 @@ type config struct {
 	// log used for logging on debug mode.
 	log func(...interface{})
 	// hooks to execute on mutations.
-	hooks *hooks
+	hooks    *hooks
+	Enforcer *casbin.Enforcer
 }
 
 // hooks per client, for fast access.
@@ -59,5 +61,12 @@ func Log(fn func(...interface{})) Option {
 func Driver(driver dialect.Driver) Option {
 	return func(c *config) {
 		c.driver = driver
+	}
+}
+
+// Enforcer configures the client Enforcer.
+func Enforcer(enforcer *casbin.Enforcer) Option {
+	return func(c *config) {
+		c.Enforcer = enforcer
 	}
 }

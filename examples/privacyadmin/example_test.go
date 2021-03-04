@@ -10,17 +10,18 @@ import (
 	"fmt"
 	"log"
 
-	"entgo.io/ent/examples/privacyadmin/viewer"
-
 	"entgo.io/ent/examples/privacyadmin/ent"
 	"entgo.io/ent/examples/privacyadmin/ent/privacy"
 	_ "entgo.io/ent/examples/privacyadmin/ent/runtime"
+	"entgo.io/ent/examples/privacyadmin/viewer"
 
+	"github.com/casbin/casbin"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func Example_PrivacyAdmin() {
-	client, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
+	ef := casbin.NewEnforcer("path/to/basic_model.conf", "path/to/basic_policy.csv")
+	client, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1", ent.Enforcer(ef))
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}

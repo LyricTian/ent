@@ -7,6 +7,7 @@ package rule
 import (
 	"context"
 
+	"entgo.io/ent/examples/privacyadmin/ent"
 	"entgo.io/ent/examples/privacyadmin/ent/privacy"
 	"entgo.io/ent/examples/privacyadmin/viewer"
 )
@@ -30,6 +31,16 @@ func AllowIfAdmin() privacy.QueryMutationRule {
 		if view.Admin() {
 			return privacy.Allow
 		}
+		// Skip to the next privacy rule (equivalent to return nil).
+		return privacy.Skip
+	})
+}
+
+// UseCasbinEnforcer is a example for injecting casbin enforcer in a policy rule.
+func UseCasbinEnforcer() privacy.QueryRule {
+	return privacy.UserQueryRuleFunc(func(ctx context.Context, q *ent.UserQuery) error {
+		// Use the injected enforcer here (implement an interface if you want to use it in a generic rule).
+		_ = q.Enforcer
 		// Skip to the next privacy rule (equivalent to return nil).
 		return privacy.Skip
 	})
